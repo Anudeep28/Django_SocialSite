@@ -1,0 +1,16 @@
+{% extends 'main.html' %}
+
+{% block title %}
+
+{% endblock title %}
+    Room Form
+
+{% block content %}
+    <div>
+        <form method="POST" action="">
+            {% csrf_token %}
+            {{form.as_p}}
+            <input type="submit" value="Submit" />
+        </form>
+    </div>
+{% endblock content %}

@@ -1,0 +1,62 @@
+{% extends 'main.html' %}
+
+{% block title %}
+    Room {{room.host}}
+{% endblock title %}
+
+{% block content %}
+<style>
+    .room-container {
+        display: grid;
+        grid-template-columns: 3fr 1fr;
+    }
+</style>
+<div class="room-container">
+    <div>
+        <h1> {{room.name}} </h1>
+        <p>{{room.description}}</p>
+
+        <div class="comment-wrapper">
+            <h3> Conversation </h3>
+            <hr>
+            {% for roomMessage in roomMessages %}
+                <div>
+                    
+                    <small>@{{ roomMessage.user }}  {{roomMessage.created|timesince}} ago</small>
+                    <p>{{roomMessage.body}}</p>
+                    {% if request.user == roomMessage.user %}
+                        <a href="{% url 'delete-message' roomMessage.id %}">Delete</a>
+                    {% endif %}
+                    <hr>
+                    
+
+                    
+                </div>
+            {% endfor %}
+
+        </div>
+        <!--This below part is where the user wopuld be able to add 
+        their comments to the chats and action basically is nothing but
+        the post request is given to room view itself-->
+        {% if request.user.is_authenticated %}
+        <div class="comment-form">
+            <form method="POST" action="">
+                {% csrf_token %}
+                <!-- for text type the user can hit enter and send a post request-->
+                <input type="text" name="body" placeholder="Write your message here..."/>
+            </form>
+
+        </div>
+        {% endif %}
+    </div>
+    <div>
+        <h3> Participants </h3>
+        <hr>
+        {% for roomUser in participants %}
+            <div>
+                <a>@{{roomUser.username}}</a>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock content %}
